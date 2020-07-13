@@ -1,3 +1,4 @@
+#' @export
 nma.prior <- function(data.nma, outcome, scale, N, sd=NULL, time = NULL){
   if (scale =="Odds Ratio" ){
     type.outcome = "binomial"

@@ -1,7 +1,7 @@
 #' Run NMA model
 #' @description Takes bugs code from an object produced by \code{nma.model} and runs model using \code{jags}.
 #' 
-#' @param model A \code{BUGSnetModel} object produced by running \code{nma.model}.
+#' @param model A \code{BUGSnetModel} object produced by running \code{nma.model}, or a list of models to be run as a simulation.
 #' @param monitor A vector of all variables that you would like to monitor. Default is "DEFAULT" which will monitor the relative treatment effects \code{d} 
 #' as well as \code{sigma} when a random effects model is used and the regression coefficients \code{beta} when meta-regression is used.
 #' @param DIC Default is TRUE and nodes required to calculate the DIC and other fit statistics are monitored. Otherwise you may set it to FALSE. 
@@ -10,7 +10,7 @@
 #' See \code{\link{jags.model}} for more info.
 #' @param mode String specifying what mode to use for the analysis. Choices are "quick", "report", or "paper".
 #' 
-#' @return \code{nma.run} returns an object of class \code{BUGSnetRun} which is a list containing the following components:
+#' @return \code{nma.run.auto} returns an object of class \code{BUGSnetRun} which is a list containing the following components:
 #' @return \code{samples} - The MCMC samples produced by running the BUGS model.
 #' @return \code{model} - The \code{BUGSnetModel} object obtained from \code{nma.model} which was used to run \code{jags}.
 #' @return \code{scale} - The scale of the outcome, based on the chosen family and link function.
@@ -27,7 +27,7 @@ nma.run.auto <- function(model,
                     inits = "DEFAULT",
                     mode = "report"){
   
-  n.chains <- sma_set_mode(mode)$n.chains
+  # Check if it 
   
   if(class(model) != "BUGSnetModel")
     stop("\'model\' must be a valid BUGSnetModel object created using the nma.model function.")
@@ -62,7 +62,6 @@ nma.run.auto <- function(model,
   } else if(DIC==FALSE){
     new.monitor <- make.monitor
   }
-  
   
   results <- sma_analyse_bayesian(sims = as_nlists(as_nlist(model$data)), # get data from BUGSnetModel object and put into compatible format
                                   code = model$bugs,
