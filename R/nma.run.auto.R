@@ -32,6 +32,20 @@ nma.run.auto <- function(model,
   if(class(model) != "BUGSnetModel")
     stop("\'model\' must be a valid BUGSnetModel object created using the nma.model function.")
   
+  if(mode %in% c("report", "paper")) {
+    
+    n.chains <- 3
+    
+  } else if (mode == "quick") {
+    
+    n.chains <- 2
+    
+  } else {
+    
+    stop(sprintf("%s is not a valid mode", mode))
+    
+  }
+  
   if (!is.null(inits) && inits == "DEFAULT")
   {
     seeds <- sample(.Machine$integer.max, n.chains, replace = FALSE)
